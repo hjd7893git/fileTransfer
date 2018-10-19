@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rest.frame.service.BaseMapper">
+    <select id="superSelect" parameterType="String" resultType="java.util.LinkedHashMap">
+        ${value}
+    </select>
+    <select id="selectTables" parameterType="com.rest.frame.model.Table" resultType="com.rest.frame.model.Table">
+        select * from "db_table"
+    </select>
+    <select id="selectFields" parameterType="com.rest.frame.model.Field" resultType="com.rest.frame.model.Field">
+        select * from "db_field"
+    </select>
+    <select id="selectOptions" parameterType="com.rest.frame.model.Option" resultType="com.rest.frame.model.Option">
+        select * from "db_option"
+    </select>
+    <select id="selectRelations" parameterType="com.rest.frame.model.Relation" resultType="com.rest.frame.model.Relation">
+        select * from "db_relation"
+    </select>
+</mapper>

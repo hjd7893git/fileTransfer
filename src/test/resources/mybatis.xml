@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type='com.rest.frame.service.HikariDataSourceFactory' alias='HikariDataSourceFactory'/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <!--<dataSource type="HikariDataSourceFactory">-->
+                <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+                <!--<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:13306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=true"/>-->
+                <!--<property name="username" value="root"/>-->
+                <!--<property name="password" value="root"/>-->
+                <!--<property name="maximumPoolSize" value="10"/>-->
+                <!--<property name="autoCommit" value="true"/>-->
+                <!--<property name="cachePrepStmts" value="true"/>-->
+                <!--<property name="prepStmtCacheSize" value="300"/>-->
+                <!--<property name="prepStmtCacheSqlLimit" value="2048"/>-->
+            <!--</dataSource>-->
+            <dataSource type="HikariDataSourceFactory">
+                <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+                <!--<property name="jdbcUrl" value="jdbc:oracle:thin:@127.0.0.1:1521:xe"/>-->
+                <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.0.165:1521:oracl1"/>
+                <property name="username" value="transfer"/>
+                <property name="password" value="transfer"/>
+                <property name="maximumPoolSize" value="10"/>
+                <property name="autoCommit" value="true"/>
+                <property name="cachePrepStmts" value="true"/>
+                <property name="prepStmtCacheSize" value="300"/>
+                <property name="prepStmtCacheSqlLimit" value="2048"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mybatis-mapper.xml"/>
+    </mappers>
+</configuration>
