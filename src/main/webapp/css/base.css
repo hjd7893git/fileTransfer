@@ -1,0 +1,366 @@
+html {
+    height: 100%;
+}
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  height: 100%;
+}
+.r{
+    color: red;
+}
+.m{
+    color: #1b6d85;
+}
+
+.login-img {
+  margin-top: -50px;
+}
+.login-back {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  padding-top: -10%;
+}
+.login-form {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 350px;
+}
+.login-form h3 {
+  text-align: center;
+}
+.login-title {
+  position: absolute;
+  top: 100px;
+  left: 30%;
+}
+.login-title h1 {
+  color: white;
+  font-size: 50px;
+}
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+}
+
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #aaa;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+
+/* Sidebar button */
+.nav-sidebar-button {
+    position: fixed;
+    width: 16px;
+    height: 90px;
+    left: 16.66666667%;
+    top: 50%;
+    margin-top: -45px;
+    z-index: 1039;
+}
+.nav-sidebar-button div {
+    width: 100%;
+}
+.nav-sidebar-button-top,.nav-sidebar-button-bottom {
+    height: 20%;
+    background-color: #aaa;
+}
+.nav-sidebar-button-top div,.nav-sidebar-button-bottom div {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+.nav-sidebar-button-top div {
+    border-radius: 0 0 0 8px;
+}
+.nav-sidebar-button-middle-left,.nav-sidebar-button-middle-right {
+    cursor: pointer;
+    height: 60%;
+    background-color: #aaa;
+    border-radius: 0 8px 8px 0;
+    text-shadow: white 1px 1px 1px;
+    color: #428bca;
+    padding-top: 18px;
+}
+.nav-sidebar-button-middle-right {
+    display: none;
+}
+.nav-sidebar-button-bottom div {
+    border-radius: 8px 0 0 0;
+}
+
+
+/* Sidebar button */
+.nav-sidebar-button-2 {
+    position: fixed;
+    width: 90px;
+    height: 16px;
+    left: 16.66666667%;
+    top: 50%;
+    margin-top: -45px;
+    z-index: 1039;
+}
+.nav-sidebar-button div {
+    width: 100%;
+}
+.nav-sidebar-button-top,.nav-sidebar-button-bottom {
+    height: 20%;
+    background-color: #aaa;
+}
+.nav-sidebar-button-top div,.nav-sidebar-button-bottom div {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+.nav-sidebar-button-top div {
+    border-radius: 0 0 0 8px;
+}
+.nav-sidebar-button-middle-left,.nav-sidebar-button-middle-right {
+    cursor: pointer;
+    height: 60%;
+    background-color: #aaa;
+    border-radius: 0 8px 8px 0;
+    text-shadow: white 1px 1px 1px;
+    color: #428bca;
+    padding-top: 18px;
+}
+.nav-sidebar-button-middle-right {
+    display: none;
+}
+.nav-sidebar-button-bottom div {
+    border-radius: 8px 0 0 0;
+}
+
+
+
+.userinfo {
+    float: right;
+    color: white;
+    margin-top: 10px;
+    margin-right: 20px;
+    font-size: 16px;
+}
+.userinfo button {
+    background-color: #222;
+}
+.userinfo button:focus, .userinfo button:hover {
+    color: white;
+}
+.userinfo button span, .userinfo button p {
+    float: left;
+    margin: 0px 5px;
+}
+
+.crudbar {
+    display: block;
+    float: left;
+}
+.pagebar {
+    float: right;
+}
+.pagegroup {
+    width: 120px;
+}
+.countinfo {
+    width: 100px;
+    float: left;
+}
+.countinfo p {
+    margin-top: 7px;
+    width: 33.33333333%;
+    float: left;
+    text-align: center;
+}
+.onepagegroup {
+    min-width: 0px;
+    display: inline-block;
+    float: left;
+}
+.onepagegroup ul {
+    border-radius: 4px;
+    padding: 7px;
+    cursor: pointer;
+}
+.onepagegroup ul:hover {
+    background-color: #ddd;
+}
+
+.controlbar {
+    position: fixed;
+    z-index: 1001;
+    background-color: white;
+    bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #aaa;
+}
+
+.input {
+    background-color: #dff0d8;
+}
+.update {
+    background-color: #fcf8e3;
+}
+.delete {
+    background-color: #f2dede;
+}
+.error-sign {
+    color: red;
+    padding-left: 0px;
+    margin-top: 8px;
+}
+
+.loginform {
+    width: 300px;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+.search {
+  width: 100%;
+  float: left;
+  margin-top: 15px;
+  border-top: 1px solid #aaa;
+}
+.search-label {
+  width: 30%;
+  padding-top: 7px;
+  margin-bottom: 0;
+  margin-right: 5%;
+  text-align: right;
+  float: left;
+}
+.search-group {
+  width: 33.3333333%;
+  float: left;
+}
+.bottom-15 {
+  margin-top: 15px;
+}
+
+.search-control {
+  display: block;
+  width: 60%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.summary {
+    margin-top: 20px;
+}
+.summary p {
+    float: left;
+    margin-top: 36px;
+    margin-right: 10px;
+}
+.summary h1 {
+    float: left;
+}
+.logo {
+    width: 33.333333%;
+    height: 50px;
+    float: left;
+    padding: 5px;
+}

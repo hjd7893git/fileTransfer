@@ -1,0 +1,39 @@
+<div>
+    <!--顶栏-->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <!-- logo -->
+        <logo-model></logo-model>
+        <!-- userinfo -->
+        <user-info-model></user-info-model>
+    </nav>
+
+    <!--内容-->
+    <div class="container-fluid">
+        <div class="row">
+            <!--左边栏，-->
+            <content-toolbar></content-toolbar>  <!--菜单名称显示-->
+            <content-button></content-button>     <!--左侧面板缩回按钮-->
+
+            <!--下边栏-->
+            <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 controlbar" ng-show="!overview">
+                <!--CRUD按钮-->
+                <button-toolbar></button-toolbar>
+
+                <!--页面选择-->
+                <page-toolbar></page-toolbar>
+
+                <!--筛选栏-->
+                <search-toolbar></search-toolbar>
+            </div>
+
+            <!--主要内容-->
+            <crud-show-model></crud-show-model>
+
+            <!--CRUDModal-->
+            <crud-info-model></crud-info-model> <!--增加/修改 详细信息显示栏-->
+
+            <!--warnModal-->
+            <warn-model></warn-model>
+        </div>
+    </div>
+</div>

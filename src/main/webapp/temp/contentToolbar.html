@@ -1,0 +1,9 @@
+<!--左边栏-->
+<div class="col-sm-2 col-md-2 sidebar">
+    <ul class="nav nav-sidebar">
+        <li ng-class="{false:'', true:'active'}[overview]"><a href="#!/overview">系统总览</a></li>
+        <li ng-repeat="menu in menus" ng-class="{false:'', true:'active'}[{{'/' + menu.url == path}}]">
+            <a href="#!/{{menu.url}}">{{menu.view}}</a>
+        </li>
+    </ul>
+</div>

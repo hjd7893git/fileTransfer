@@ -1,0 +1,34 @@
+<!--页面选择-->
+<div class="btn-toolbar pagebar">
+    <div class="onepagegroup">
+        <ul class="nav navbar-nav"  ng-repeat="n in range10"  ng-if="(crud.total/crud.pageSize | ceil) >= n && crud.page <= 5" ng-click="gotoPage('/'+crud.table.db_name, n)">
+            <li ng-if="(crud.total/crud.pageSize | ceil) <= 10 && (crud.total/crud.pageSize | ceil) >= n"><span ng-class="{false:'m', true:'r'}[n == pageCtu]" >{{n}}</span></li>
+            <li ng-if="(crud.total/crud.pageSize | ceil) > 10 && crud.page <= 5"><span ng-class="{false:'m', true:'r'}[n == pageCtu]">{{n}}</span></li>
+        </ul>
+        <ul class="nav navbar-nav"  ng-repeat="n in range10"  ng-if="(crud.total/crud.pageSize | ceil) >= n && crud.page > 5 && crud.page <= (crud.total/crud.pageSize | ceil) - 5 " ng-click="gotoPage('/'+crud.table.db_name, crud.page + n - 5)">
+            <li  ng-class="{false:'m', true:'r'}[pageCtu == (pageCtu + n - 5)]">{{crud.page + n - 5}}</li>
+        </ul>
+        <ul class="nav navbar-nav"  ng-repeat="n in range10"  ng-if="(crud.total/crud.pageSize | ceil) >= n && crud.page > 5 && crud.page > (crud.total/crud.pageSize | ceil) - 5 && (crud.total/crud.pageSize | ceil) - 10 + n > 0" ng-click="gotoPage('/'+crud.table.db_name, (crud.total/crud.pageSize | ceil) - 10 + n)">
+            <li ng-class="{false:'', true:'r'}[pageCtu == (crud.total/crud.pageSize | ceil) - 10 + n]">{{(crud.total/crud.pageSize | ceil) - 10 + n}}</li>
+        </ul>
+        <ul class="nav navbar-nav"  ng-repeat="n in range10|reverse"  ng-if="(crud.total/crud.pageSize | ceil) >= n && crud.page > 5 && crud.page > (crud.total/crud.pageSize | ceil) - 5 && (crud.total/crud.pageSize | ceil) - 10 + n <= 0" ng-click="gotoPage('/'+crud.table.db_name, (crud.total/crud.pageSize | ceil) - n + 1)">
+            <li  ng-class="{false:'m', true:'r'}[pageCtu == (crud.total/crud.pageSize | ceil) - n + 1]">{{(crud.total/crud.pageSize | ceil) - n + 1}}</li>
+        </ul>
+
+    </div>
+    <div class="input-group pagegroup">
+        <input type="text" class="form-control" ng-model="crud.pageSize">
+        <span class="input-group-addon">条/页</span>
+    </div>
+    <div class="countinfo">
+        <p>共</p>
+        <p ng-bind="crud.total/crud.pageSize | ceil"></p>
+        <p>页</p>
+    </div>
+    <div class="input-group pagegroup">
+        <input type="text" class="form-control" ng-model="pageCtu">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" ng-click="gotoPage('/'+crud.table.db_name, pageCtu)">转到</button>
+        </span>
+    </div>
+</div>

@@ -59,16 +59,16 @@ public class XmlService {
             if (result.size() != 0) {
                 List<Data> nodeDatas = result.get(0);
                 NodeConf conf = new NodeConf();
-                long nodeId = (long) nodeDatas.get(0).getValue();
+                long nodeId = Long.parseLong(nodeDatas.get(0).getValue().toString());
                 nodeDatas.forEach(d -> {
                     switch (d.getKey()) {
                         case "name" : conf.setNodeName((String) d.getValue()); break;
                         case "ip" : conf.setNodeIp((String) d.getValue()); break;
-                        case "port" : conf.setNodePort((int) (long) d.getValue()); break;
+                        case "port" : conf.setNodePort((int) Long.parseLong(d.getValue().toString())); break;
                         case "nodevk" : conf.setNodeVk((String) d.getValue()); break;
                         case "nodepk" : conf.setNodePk((String) d.getValue()); break;
                         case "cert" : conf.setNodeCert((String) d.getValue()); break;
-                        case "speed" : conf.setMaxSpeed((int) (long) d.getValue()); break;
+                        case "speed" : conf.setMaxSpeed((int)Long.parseLong(d.getValue().toString())); break;
                     }
                 });
                 //    Step2: 查询Policy
@@ -81,11 +81,11 @@ public class XmlService {
                     Policy policy = new Policy();
                     p.forEach(d -> {
                         switch (d.getKey()) {
-                            case "id" : policy.setPolicyId((long) d.getValue()); break;
+                            case "id" : policy.setPolicyId(Long.parseLong(d.getValue().toString())); break;
                             case "path" : policy.setSrcPath((String) d.getValue()); break;
-                            case "enc" : policy.setEncTag((boolean) d.getValue()); break;
-                            case "compress" : policy.setCompressTag((boolean) d.getValue()); break;
-                            case "sign" : policy.setSignTag((boolean) d.getValue()); break;
+                            case "enc" : policy.setEncTag(((BigDecimal) d.getValue()).intValue() != 0); break;
+                            case "compress" : policy.setCompressTag(((BigDecimal) d.getValue()).intValue() != 0); break;
+                            case "sign" : policy.setSignTag(((BigDecimal) d.getValue()).intValue() != 0); break;
                             case "times" : policy.setTimes((String) d.getValue()); break;
                             case "extensions" : policy.setExtensions((String) d.getValue()); break;
                         }
@@ -100,7 +100,7 @@ public class XmlService {
                             long dstNodeId = 0L;
                             for(int j = 0; j < pn.size(); j++) {
                                 switch (pn.get(j).getKey()) {
-                                    case "nodeid" : dstNodeId = (long) pn.get(j).getValue(); break;
+                                    case "nodeid" : dstNodeId =Long.parseLong(pn.get(j).getValue().toString()); break;
                                     case "path" : node.setPath((String) pn.get(j).getValue()); break;
                                 }
                             }
@@ -111,7 +111,7 @@ public class XmlService {
                             resultDstNode.forEach(dn -> {
                                 switch (dn.getKey()) {
                                     case "ip" : node.setIp((String) dn.getValue()); break;
-                                    case "port" : node.setPort((int) (long) dn.getValue()); break;
+                                    case "port" : node.setPort((int) Long.parseLong(dn.getValue().toString())); break;
                                     case "nodepk" : node.setPk((String) dn.getValue()); break;
                                 }
                             });

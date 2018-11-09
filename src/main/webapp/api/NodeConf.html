@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API: NodeConf</title>
+    <style type="text/css">
+        body{
+            width: 1024px;
+            margin: 0px auto;
+        }
+        h1{
+            text-align: center;
+        }
+        div{
+            float: left;
+        }
+        input{
+            width: 850px;
+            height: 20px;
+            margin: 10px;
+        }
+        button{
+            width: 100px;
+        }
+        .button{
+            margin-top: 10px;
+        }
+        textarea{
+            width: 1024px;
+            height: 400px;
+        }
+        table{
+            width: 1000px;
+        }
+    </style>
+</head>
+<body>
+<h1>API: NodeConf</h1>
+<div>
+    <h2>说明</h2>
+    <h3>HTTP请求类型: GET</h3>
+    <h3>URL: http://${host}:${port}/${projectName}/rest/xml/NodeConf/${nodeName}</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>host</td>
+            <td>服务器地址</td>
+        </tr>
+        <tr>
+            <td>port</td>
+            <td>服务器服务端口</td>
+        </tr>
+        <tr>
+            <td>nodeName</td>
+            <td>传输节点名称(节点配置文件中配置)</td>
+        </tr>
+    </table>
+    <h3>XML: version="1.0" encoding="UTF-8" standalone="yes"</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>maxSpeed</td>
+            <td>节点最大速度限制(单位KB)</td>
+        </tr>
+        <tr>
+            <td>nodeCert</td>
+            <td>节点公钥证书(公钥+根公私钥对（nodeName+公钥）的签名)</td>
+        </tr>
+        <tr>
+            <td>nodeIp</td>
+            <td>传输节点IP地址</td>
+        </tr>
+        <tr>
+            <td>nodeName</td>
+            <td>传输节点名称(同请求中nodeName)</td>
+        </tr>
+        <tr>
+            <td>nodePort</td>
+            <td>传输节点服务端口(节点根据该端口值与实际端口进行绑定)</td>
+        </tr>
+        <tr>
+            <td>nodeVk</td>
+            <td>传输节点私钥密文(由加密机lmk保护)</td>
+        </tr>
+        <tr>
+            <td>rootPk</td>
+            <td>根公钥(验证传输节点证书中的签名)</td>
+        </tr>
+        <tr>
+            <td>policys</td>
+            <td>传输规则(传输通道, 每存在一个由该节点发起的传输通道则包含一个policy)</td>
+        </tr>
+    </table>
+    <h3>Policy: 传输通道</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>compressTag</td>
+            <td>是否压缩标志位(true/false)</td>
+        </tr>
+        <tr>
+            <td>encTag</td>
+            <td>是否加密标志位(true/false)</td>
+        </tr>
+        <tr>
+            <td>extensions</td>
+            <td>允许的文件类型(*为不检查文件类型)</td>
+        </tr>
+        <tr>
+            <td>policyId</td>
+            <td>传输通道在数据库中的Id索引(节点应记录该信息, 上送监控数据时服务端根据该Id索引区分传输通道)</td>
+        </tr>
+        <tr>
+            <td>signTag</td>
+            <td>是否签名标志位(true/false)</td>
+        </tr>
+        <tr>传输规则(传输通道, 每存在一个由该节点发起的传输通道则包含一个policy)
+            <td>srcPath</td>
+            <td>传输通道的初始目录</td>
+        </tr>
+        <tr>
+            <td>times</td>
+            <td>传输任务检查时间点(*为检测到文件存在即发送)</td>
+        </tr>
+        <tr>
+            <td>nodes</td>
+            <td>目标节点(每存在一个目标节点则包含一个node)</td>
+        </tr>
+    </table>
+    <h3>Node: 目标节点</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>ip</td>
+            <td>目标节点IP地址</td>
+        </tr>
+        <tr>
+            <td>path</td>
+            <td>目标节点上的目录</td>
+        </tr>
+        <tr>
+            <td>pk</td>
+            <td>目标节点的公钥</td>
+        </tr>
+        <tr>
+            <td>port</td>
+            <td>目标节点的服务端口</td>
+        </tr>
+    </table>
+</div>
+<div>
+    <h2>测试</h2>
+    <div>
+        URL:&nbsp;<input id="url" type="text" value="http://bicycle-jerseyrest.daoapp.io/jerseyRest/rest/xml/NodeConf/testNode" />
+    </div>
+    <div class="button">
+        <button onclick="getConf()">获取</button>
+    </div>
+</div>
+
+<textarea id="result" disabled="disabled"></textarea>
+
+
+
+<script>
+    function getConf() {
+        var url = document.getElementById('url').value;
+        var result = document.getElementById('result');
+        var obj = new XMLHttpRequest();
+        obj.open('GET', url, true);
+        obj.onreadystatechange = function() {
+            if (obj.status == 200 || obj.status == 201) {
+                console.info(obj.responseText);
+                result.innerHTML = formatXml(obj.responseText);
+            } else {
+                result.innerHTML = "查询出错!";
+            }
+        };
+        obj.send();
+    }
+
+    function formatXml(text) {
+         //去掉多余的空格
+         text = '\n' + text.replace(/(<\w+)(\s.*?>)/g, function ($0, name, props) {
+                     return name + ' ' + props.replace(/\s+(\w+=)/g, " $1");
+                 }).replace(/>\s*?</g, ">\n<");
+
+         //把注释编码
+         text = text.replace(/\n/g, '\r').replace(/<!--(.+?)-->/g, function ($0, text) {
+             var ret = '<!--' + escape(text) + '-->';
+             //alert(ret);
+             return ret;
+         }).replace(/\r/g, '\n');
+
+         //调整格式
+         var rgx = /\n(<(([^\?]).+?)(?:\s|\s*?>|\s*?(\/)>)(?:.*?(?:(?:(\/)>)|(?:<(\/)\2>)))?)/mg;
+         var nodeStack = [];
+         var output = text.replace(rgx, function ($0, all, name, isBegin, isCloseFull1, isCloseFull2, isFull1, isFull2) {
+             var isClosed = (isCloseFull1 == '/') || (isCloseFull2 == '/' ) || (isFull1 == '/') || (isFull2 == '/');
+             //alert([all,isClosed].join('='));
+             var prefix = '';
+             if (isBegin == '!') {
+                 prefix = getPrefix(nodeStack.length);
+             }
+             else {
+                 if (isBegin != '/') {
+                     prefix = getPrefix(nodeStack.length);
+                     if (!isClosed) {
+                         nodeStack.push(name);
+                     }
+                 }
+                 else {
+                     nodeStack.pop();
+                     prefix = getPrefix(nodeStack.length);
+                 }
+
+             }
+             var ret = '\n' + prefix + all;
+             return ret;
+         });
+
+         var prefixSpace = -1;
+         var outputText = output.substring(1);
+         //alert(outputText);
+
+         //把注释还原并解码，调格式
+         outputText = outputText.replace(/\n/g, '\r').replace(/(\s*)<!--(.+?)-->/g, function ($0, prefix, text) {
+             //alert(['[',prefix,']=',prefix.length].join(''));
+             if (prefix.charAt(0) == '\r')
+                 prefix = prefix.substring(1);
+             text = unescape(text).replace(/\r/g, '\n');
+             var ret = '\n' + prefix + '<!--' + text.replace(/^\s*/mg, prefix) + '-->';
+             //alert(ret);
+             return ret;
+         });
+
+         return outputText.replace(/\s+$/g, '').replace(/\r/g, '\r\n');
+     }
+    function getPrefix(prefixIndex) {
+         var span = '    ';
+         var output = [];
+         for (var i = 0; i < prefixIndex; ++i) {
+             output.push(span);
+         }
+         return output.join('');
+    }
+</script>
+</body>
+</html>

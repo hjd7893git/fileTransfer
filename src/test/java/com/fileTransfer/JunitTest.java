@@ -2,6 +2,7 @@ package com.fileTransfer;
 
 import com.fileTransfer.custom.service.PersonalDAO;
 import com.fileTransfer.custom.service.PersonalRest;
+import com.fileTransfer.custom.service.TcpService;
 import com.rest.frame.exception.UsualException;
 import com.rest.frame.model.Data;
 import com.rest.frame.model.Field;
@@ -16,11 +17,16 @@ import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.xml.XmlConfiguration;
 import org.junit.Test;
+import org.mindrot.jbcrypt.BCrypt;
+import sviolet.smcrypto.SM2Cipher;
 import sviolet.smcrypto.SM3Digest;
+import sviolet.smcrypto.exception.InvalidKeyDataException;
+import sviolet.smcrypto.exception.InvalidSignDataException;
 import sviolet.smcrypto.util.ByteUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,11 +35,21 @@ import java.util.List;
 public class JunitTest {
 
     @Test
-    public void test0() throws UsualException {
-//        SM2Cipher.KeyPair k = new SM2Cipher().generateKeyPair();
-//        System.out.println(ByteUtils.bytesToHex(k.getPublicKey()));
-//        System.out.println(new SM2Cipher().verifySignByBytes(ByteUtils.hexToBytes("31323334353637383132333435363738"), ByteUtils.hexToBytes("04" + "EA73ADED9F167F5BE13CFC5D2B47AC76B87A55504F3B242E22AC1DEB65C2E3A6DAD71DF6FBF40E1A4610D229D46B47DB081C2D1CA75D857C745421D3854A69E3"), ("test" + "1516342727384").getBytes(), ByteUtils.hexToBytes("9D53059E35345F074122A994406F90AB205CA2DB609B165577F65B47AF265BD798B753599CEF6A36FB821E9959C81E7167A72CE7139A92B3DDF10C0F008D5C37")));
-//
+    public void test0() throws UsualException, InvalidSignDataException, InvalidKeyDataException {
+        SM2Cipher.KeyPair k = new SM2Cipher().generateKeyPair();
+        System.out.println(ByteUtils.bytesToHex(k.getPublicKey()));
+        System.out.println(new SM2Cipher().verifySignByBytes(ByteUtils.hexToBytes("31323334353637383132333435363738"), ByteUtils.hexToBytes("04" + "EA73ADED9F167F5BE13CFC5D2B47AC76B87A55504F3B242E22AC1DEB65C2E3A6DAD71DF6FBF40E1A4610D229D46B47DB081C2D1CA75D857C745421D3854A69E3"), ("test" + "1516342727384").getBytes(),   ByteUtils.hexToBytes("9D53059E35345F074122A994406F90AB205CA2DB609B165577F65B47AF265BD798B753599CEF6A36FB821E9959C81E7167A72CE7139A92B3DDF10C0F008D5C37")));
+        System.out.println(new SM2Cipher().verifySignByBytes(ByteUtils.hexToBytes("31323334353637383132333435363738"),
+                ByteUtils.hexToBytes("04627AAF79AC2AD2CEC5203E1BE5B96507334BAAC515E958B47EF2A444CF79BFA6C270D134CF4149245BE10DC416B10BB5200EC5C8EFCEB93D7300CEE31483D4EF"),
+                ("test02" + "1540177927778").getBytes(),
+                ByteUtils.hexToBytes("25FC83FEC72E1824B652A7B17AA85454358B258D934EDB5555F92EA6E2D991D096AF71BE0BF56AB96BCD69C6E179E2DF854F9244A093674FBA435EF4DACAA2B8")));
+
+        String pwd = BCrypt.hashpw("1234", BCrypt.gensalt(4));
+        System.out.println("加密后的数据为："+pwd);
+        boolean apwd = BCrypt.checkpw("1234",pwd);
+        System.out.println("验证结果为："+apwd);
+
+        //
 //
 //
 //        System.out.println(ByteUtils.bytesToHex("test011516262927432".getBytes()));
@@ -438,15 +454,17 @@ public class JunitTest {
     @Test
     public void test12() throws UsualException {
         PersonalDAO dao = new PersonalDAO();
-        dao.getOverview();
+        HashMap<String, Long> stringLongHashMap =  dao.getOverview();
+        dao.getOverview2();
+        System.out.println(stringLongHashMap);
 
     }
 
-//    @Test
-//    public void test13() throws UsualException {
-//        TcpService tcp = new TcpService("182.92.171.39", 3333, 0);
-//        tcp.send("LG");
-//    }
+    @Test
+    public void test13() throws UsualException {
+        TcpService tcp = new TcpService("182.92.171.39", 3333, 0);
+        System.out.println(tcp.send("LG"));
+    }
 
     @Test
     public void test14() throws UsualException {

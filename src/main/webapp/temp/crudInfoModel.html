@@ -1,0 +1,47 @@
+<div class="modal fade" id="crudModal" tabindex="-1" role="dialog" aria-labelledby="crudLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" role="form" name="myForm" ng-submit="cudOne('/'+ crud.table.db_name, show)">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="crudLabel" ng-bind="action | theOption: crudOptions"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" ng-repeat="field in crud.table.fields"  ng-show="action != 'Insert' || !field.db_cthide"> <!--新增时数据暂不修改，根据是否修改选项来进行判断-->
+                        <label class="col-sm-3 col-md-3 control-label" ng-if="!field.db_hide" ng-bind="field.db_view"></label>
+                        <div class="col-sm-8 col-md-8" ng-repeat="s in show" ng-if="!field.db_hide && s.key==field.db_name && !field.db_relation">
+                            <select class="form-control" ng-if="field.db_option" name="{{field.db_name}}" ng-model="s.value"
+                                    ng-disabled="field.db_disable || (!field.db_repair && action == 'Update') || action == 'Check'">
+                                <option></option>
+                                <option ng-repeat="o in options[field.db_optionid]" value="{{o.key}}">{{o.value}}</option>
+                            </select>
+                            <input class="form-control" type="text" ng-if="!field.db_option && field.db_type=='number'" placeholder="{{field.db_tip}}"
+                                   ng-required="field.db_id != crud.table.db_index && field.db_require"
+                                   ng-disabled="field.db_disable || (!field.db_repair && action == 'Update') || action == 'Check'"
+                                   min="field.db_min" max="field.db_max" name="{{field.db_name}}" ng-model="s.value"/>
+                            <input class="form-control" type="text" ng-if="!field.db_option && field.db_type=='string'" placeholder="{{field.db_tip}}"
+                                   ng-required="field.db_id != crud.table.db_index && field.db_require"
+                                   ng-disabled="field.db_disable || (!field.db_repair && action == 'Update') || action == 'Check'"
+                                   ng-pattern="field.db_regex" name="{{field.db_name}}" ng-model="s.value"/>
+                            <textarea class="form-control" rows="5" ng-if="!field.db_option && (field.db_type=='text' || field.db_type=='clob')" placeholder="{{field.db_tip}}"
+                                      ng-required="field.db_id != crud.table.db_index && field.db_require"
+                                      ng-disabled="field.db_disable || (!field.db_repair && action == 'Update') || action == 'Check'"
+                                      ng-pattern="field.db_regex" name="{{field.db_name}}" ng-model="s.value"></textarea>
+                            <!--<select class="form-control" ng-if="!field.db_option && field.db_type=='boolean'" name="{{field.db_name}}" ng-model="s.value"-->
+                            <!--ng-disabled="field.db_id == crud.table.db_index || (!field.db_repair && action == 'Update') || action == 'Check'">-->
+                            <!--<option></option>-->
+                            <!--<option value="true">是</option>-->
+                            <!--<option value="false">否</option>-->
+                            <!--</select>-->
+                        </div>
+                        <span class="col-sm-1 glyphicon glyphicon-remove error-sign" ng-if="!field.db_hide" ng-show="myForm.{{field.db_name}}.$invalid"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary" ng-show="action != 'Check'">确定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

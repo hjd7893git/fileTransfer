@@ -124,6 +124,7 @@ public class NodeConf implements Serializable {
             }
             temp.append(p.getSrcPath()).append(p.getTimes()).append(p.getExtensions()).append(p.isEncTag()).append(p.isCompressTag()).append(p.isSignTag());
         }
+        //拼装后的数据进行摘要计算，生成摘要数据
         SM3Digest digest = new SM3Digest();
         digest.update(temp.toString().getBytes());
         this.ssid = ByteUtils.bytesToHex(digest.doFinal()).toUpperCase();
@@ -131,6 +132,7 @@ public class NodeConf implements Serializable {
 
     public void calcSign() throws UsualException {
         TcpService hsm = new TcpService();
+        //对摘要数据进行sm2签名计算，得到签名数据(节点+传输通道等XML数据)
         this.xmlSign = hsm.calcSm2Sign(this.ssid);
         hsm.close();
     }

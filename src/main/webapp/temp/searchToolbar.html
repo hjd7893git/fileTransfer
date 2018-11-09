@@ -1,0 +1,18 @@
+<!--筛选栏-->
+<div class="search" style="display: none;">
+    <div class="search-group" ng-repeat="field in searchs">
+        <div class="bottom-15" ng-if="field.db_search">
+            <label class="search-label control-label" ng-if="field.db_search" ng-bind="field.db_view"></label>
+            <select class="search-control" ng-if="field.db_search && field.db_option" name="{{field.db_name}}" ng-model="field.db_regex">
+                <option></option>
+                <option ng-repeat="o in options[field.db_optionid]" value="{{o.key}}">{{o.value}}</option>
+            </select>
+            <input class="search-control" type="text" ng-if="field.db_search && (!field.db_option && field.db_type=='number')" placeholder="{{field.db_tip}}"
+                   min="field.db_min" max="field.db_max" name="{{field.db_name}}" ng-model="field.db_regex"/>
+            <input class="search-control" type="text" ng-if="field.db_search && (!field.db_option && field.db_type=='string')" placeholder="{{field.db_tip}}"
+                   ng-pattern="field.db_regex" name="{{field.db_name}}" ng-model="field.db_regex"/>
+            <textarea class="search-control" rows="5" ng-if="field.db_search && (!field.db_option) && field.db_type=='text'" placeholder="{{field.db_tip}}"
+                      ng-pattern="field.db_regex" name="{{field.db_name}}" ng-model="field.db_regex"></textarea>
+        </div>
+    </div>
+</div>

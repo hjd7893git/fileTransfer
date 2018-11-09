@@ -1,0 +1,19 @@
+<div class="modal fade" id="warnModal" tabindex="-1" role="dialog" aria-labelledby="warnLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="warnLabel" ng-bind="warn.title"></h4>
+            </div>
+            <div class="modal-body">
+                请求地址（URL）:{{warn.url}}<br/>
+                请求类型:{{warn.action}}<br/>
+                错误代码（Code）:{{warn.errorCode}}<br/>
+                {{warn.errorMsg}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>

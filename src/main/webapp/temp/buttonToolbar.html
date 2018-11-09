@@ -1,0 +1,41 @@
+<div class="btn-toolbar crudbar">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" ng-click="showEdit('Check')">
+            <span class="glyphicon glyphicon-search"></span> 查看
+        </button>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" ng-click="changeSearch()" ng-if="!isSearch">
+            <span class="glyphicon glyphicon-search"></span> 打开查询
+        </button>
+        <button type="button" class="btn btn-default" ng-click="changeSearch()" ng-if="isSearch">
+            <span class="glyphicon glyphicon-search"></span> 关闭查询
+        </button>
+        <button type="button" class="btn btn-default" ng-click="doSearch()" ng-if="isSearch">
+            <span class="glyphicon glyphicon-search"></span> 查询
+        </button>
+    </div>
+
+    <div class="btn-group" ng-show="db_type=='read-write'">
+        <button type="button" class="btn btn-default input" ng-click="showEdit('Insert')" ng-if="crud.table.db_name!='warn'">
+            <span class="glyphicon glyphicon-plus"></span> 增加
+        </button>
+        <button type="button" class="btn btn-default update" ng-click="showEdit('Update')" ng-if="crud.table.db_name!='config'">
+            <span class="glyphicon glyphicon-cog"></span> 修改
+        </button>
+        <button type="button" class="btn btn-default delete" ng-click="showEdit('Delete')" ng-if="!(crud.table.db_name=='warn' || crud.table.db_name=='config')">
+            <span class="glyphicon glyphicon-trash"></span> 删除
+        </button>
+    </div>
+
+    <div class="btn-group" ng-show="crud.table.db_name=='config'">
+        <button type="button" class="btn btn-default" ng-click="useConfig()">
+            <span class="glyphicon glyphicon-send"></span> 应用
+        </button>
+    </div>
+    <div class="btn-group" ng-show="crud.table.db_name=='config'">
+        <button type="button" class="btn btn-default" ng-click="()">
+            <span class="glyphicon glyphicon-trash"></span> 停止
+        </button>
+    </div>
+</div>

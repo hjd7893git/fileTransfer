@@ -81,11 +81,10 @@ public class PersonalListener implements ServletContextListener {
             try {
                 TcpService tcp = new TcpService(this.ip, this.port, 0);
                 if (!tcp.send("NC").startsWith("ND")) {
-
                     throw new UsualException("传输节点[\" + this.ip + \":\" + this.port + \"]NC返回报文不正常");
                 }
                 if (!this.status) {
-                    //String monitorRes = tcp.send("");
+//                    String monitorRes = tcp.send("");
                     // 监控信息收集部分
 
 
@@ -96,6 +95,7 @@ public class PersonalListener implements ServletContextListener {
                 this.newStatus = false;
                 logger.warn("监控任务[" + this.ip + ":" + this.port + "]:" + e.getMessage());
             } finally {
+                //监控探测节点失败后，更新节点的状态信息
                 if (this.status != this.newStatus)
                     this.dao.updateNodeStatus(id, this.newStatus);
             }

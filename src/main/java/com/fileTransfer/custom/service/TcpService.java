@@ -45,6 +45,10 @@ public class TcpService {
         ip = prop.getProperty("ip");
         //获取address的值
         port = Integer.parseInt(prop.getProperty("port"));
+
+        /**
+         * 创建连接
+         */
         this.explorer();
 
         this.vk = prop.getProperty("vk", "");
@@ -226,10 +230,11 @@ public class TcpService {
         this.pk = prop.getProperty("pk", "");
 
         try {
+            //从对象流中读取得到数据
             ByteArrayInputStream is = new ByteArrayInputStream(ByteUtils.hexToBytes(data));
             ObjectInputStream ois = new ObjectInputStream(is);
             NodeConf conf = (NodeConf) ois.readObject();
-            conf.calcSign();
+            conf.calcSign(); //ssid进行sm2签名 得到XML签名值
             logger.info("xmlSign:{}", conf.getXmlSign());
 
             JAXBContext context = JAXBContext.newInstance(conf.getClass());
@@ -245,7 +250,7 @@ public class TcpService {
             // 设置单次传输最大长度
             int maxLength = 9999;
             int count = xmlString.length() / maxLength + 1;
-            // 分次发送配置信息
+            // 分次发送配置信息(拼组)
             for (int i = 1; i <= count; i ++) {
                 String send = "XM" + String.format("%04d", (i < count) ? maxLength : (xmlString.length() % maxLength)) + ((i < count) ? xmlString.substring((i - 1) * maxLength, i * maxLength) : xmlString.substring((i - 1) * maxLength));
                 String res = this.send(send);

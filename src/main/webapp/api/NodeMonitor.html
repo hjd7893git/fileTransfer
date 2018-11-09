@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API: NodeMonitor</title>
+    <style type="text/css">
+        body{
+            width: 1024px;
+            margin: 0px auto;
+        }
+        h1{
+            text-align: center;
+        }
+        div{
+            float: left;
+        }
+        input{
+            width: 850px;
+            height: 20px;
+            margin: 10px;
+        }
+        button{
+            width: 100px;
+        }
+        .button{
+            margin-top: 10px;
+        }
+        textarea{
+            width: 1024px;
+            height: 400px;
+        }
+        table{
+            width: 1000px;
+        }
+    </style>
+</head>
+<body>
+<h1>API: NodeMonitor</h1>
+<div>
+    <h2>说明</h2>
+    <h3>HTTP请求类型: POST</h3>
+    <h3>HTTP报文格式: application/xml</h3>
+    <h3>URL: http://${host}:${port}/${projectName}/rest/xml/NodeMonitor/${nodeName}</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>host</td>
+            <td>服务器地址</td>
+        </tr>
+        <tr>
+            <td>port</td>
+            <td>服务器服务端口</td>
+        </tr>
+        <tr>
+            <td>nodeName</td>
+            <td>传输节点名称(节点配置文件中配置)</td>
+        </tr>
+    </table>
+    <h3>XML: version="1.0" encoding="UTF-8" standalone="yes"</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>nodeName</td>
+            <td>传输节点名称(同请求中nodeName)</td>
+        </tr>
+        <tr>
+            <td>policys</td>
+            <td>传输规则(传输通道, 每存在一个由该节点发起的传输通道则包含一个policy)</td>
+        </tr>
+    </table>
+    <h3>Policy: 传输通道</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>policyId</td>
+            <td>传输通道在数据库中的Id索引</td>
+        </tr>
+        <tr>
+            <td>files</td>
+            <td>任务文件(每存在一个未完成的任务则包含一个file)</td>
+        </tr>
+    </table>
+    <h3>File: 传输文件</h3>
+    <table border="1" cellspacing="0">
+        <tr>
+            <th>项</th>
+            <th>说明</th>
+        </tr>
+        <tr>
+            <td>fileName</td>
+            <td>文件名称</td>
+        </tr>
+        <tr>
+            <td>finish</td>
+            <td>已完成的文件包数量</td>
+        </tr>
+        <tr>
+            <td>size</td>
+            <td>文件总大小(KB)</td>
+        </tr>
+        <tr>
+            <td>speed</td>
+            <td>当前传输速度(KB/S)</td>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>传输状态(状态值待定，例如1正常，2中断，3失败)</td>
+        </tr>
+        <tr>
+            <td>total</td>
+            <td>拆分的文件包数量</td>
+        </tr>
+    </table>
+
+    <h2>测试</h2>
+    <h3>请求内容(XML)</h3>
+    <textarea id="send"></textarea>
+    <div>
+        URL:&nbsp;<input id="url" type="text" value="http://bicycle-jerseyrest.daoapp.io/jerseyRest/rest/xml/NodeMonitor/testNode" />
+    </div>
+    <div class="button">
+        <button onclick="sendMonitor()">发送</button>
+    </div>
+</div>
+<textarea id="result" disabled="disabled" style="height: 100px"></textarea>
+
+<script>
+    window.onload = function() {
+        var send = document.getElementById('send');
+        var xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><monitor><nodeName>testNode</nodeName><policys><policy><files><file><fileName>test.doc</fileName><finish>2</finish><size>2048</size><speed>0</speed><status>2</status><total>4</total></file><file><fileName>test.txt</fileName><finish>3</finish><size>4096</size><speed>0</speed><status>2</status><total>8</total></file></files><policyId>19</policyId></policy><policy><files><file><fileName>test2.doc</fileName><finish>2</finish><size>2048</size><speed>0</speed><status>2</status><total>4</total></file><file><fileName>test2.txt</fileName><finish>3</finish><size>4096</size><speed>0</speed><status>2</status><total>8</total></file></files><policyId>20</policyId></policy></policys></monitor>';
+        send.innerHTML = formatXml(xml);
+        console.info(send.value);
+    }
+
+    function sendMonitor() {
+        var url = document.getElementById('url').value;
+        var send = document.getElementById('send');
+        var result = document.getElementById('result');
+        var obj = new XMLHttpRequest();
+        obj.open("POST", url, true);
+        obj.setRequestHeader("Content-type", "application/xml; charset=utf-8");  // 添加http头，发送信息至服务器时内容编码类型
+        obj.onreadystatechange = function() {
+            if (obj.status == 200 || obj.status == 201) {
+                console.info(obj.responseText);
+                result.innerHTML = formatXml(obj.responseText);
+            } else {
+                result.innerHTML = "查询出错!";
+            }
+        };
+        obj.send(send.value);
+    }
+
+    function formatXml(text) {
+         //去掉多余的空格
+         text = '\n' + text.replace(/(<\w+)(\s.*?>)/g, function ($0, name, props) {
+                     return name + ' ' + props.replace(/\s+(\w+=)/g, " $1");
+                 }).replace(/>\s*?</g, ">\n<");
+
+         //把注释编码
+         text = text.replace(/\n/g, '\r').replace(/<!--(.+?)-->/g, function ($0, text) {
+             var ret = '<!--' + escape(text) + '-->';
+             //alert(ret);
+             return ret;
+         }).replace(/\r/g, '\n');
+
+         //调整格式
+         var rgx = /\n(<(([^\?]).+?)(?:\s|\s*?>|\s*?(\/)>)(?:.*?(?:(?:(\/)>)|(?:<(\/)\2>)))?)/mg;
+         var nodeStack = [];
+         var output = text.replace(rgx, function ($0, all, name, isBegin, isCloseFull1, isCloseFull2, isFull1, isFull2) {
+             var isClosed = (isCloseFull1 == '/') || (isCloseFull2 == '/' ) || (isFull1 == '/') || (isFull2 == '/');
+             //alert([all,isClosed].join('='));
+             var prefix = '';
+             if (isBegin == '!') {
+                 prefix = getPrefix(nodeStack.length);
+             }
+             else {
+                 if (isBegin != '/') {
+                     prefix = getPrefix(nodeStack.length);
+                     if (!isClosed) {
+                         nodeStack.push(name);
+                     }
+                 }
+                 else {
+                     nodeStack.pop();
+                     prefix = getPrefix(nodeStack.length);
+                 }
+
+             }
+             var ret = '\n' + prefix + all;
+             return ret;
+         });
+
+         var prefixSpace = -1;
+         var outputText = output.substring(1);
+         //alert(outputText);
+
+         //把注释还原并解码，调格式
+         outputText = outputText.replace(/\n/g, '\r').replace(/(\s*)<!--(.+?)-->/g, function ($0, prefix, text) {
+             //alert(['[',prefix,']=',prefix.length].join(''));
+             if (prefix.charAt(0) == '\r')
+                 prefix = prefix.substring(1);
+             text = unescape(text).replace(/\r/g, '\n');
+             var ret = '\n' + prefix + '<!--' + text.replace(/^\s*/mg, prefix) + '-->';
+             //alert(ret);
+             return ret;
+         });
+
+         return outputText.replace(/\s+$/g, '').replace(/\r/g, '\r\n');
+     }
+    function getPrefix(prefixIndex) {
+         var span = '    ';
+         var output = [];
+         for (var i = 0; i < prefixIndex; ++i) {
+             output.push(span);
+         }
+         return output.join('');
+    }
+</script>
+</body>
+</html>

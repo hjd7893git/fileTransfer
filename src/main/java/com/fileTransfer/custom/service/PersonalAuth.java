@@ -38,8 +38,8 @@ public class PersonalAuth {
 
     /**
      * 报道操作
-     * @return              返回内容(时间戳、随机数)
      *
+     * @return 返回内容(时间戳、随机数)
      */
     @GET
     @Path("/report")
@@ -57,8 +57,9 @@ public class PersonalAuth {
 
     /**
      * 登录操作
-     * @param request       请求内容(用户名、hash密码、签名值)
-     * @return              返回内容(令牌)
+     *
+     * @param request 请求内容(用户名、hash密码、签名值)
+     * @return 返回内容(令牌)
      */
     @POST
     @Path("/login")
@@ -76,8 +77,10 @@ public class PersonalAuth {
             return Response.status(Response.Status.NOT_ACCEPTABLE).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "content-type").entity("{\"message\":\"" + e.getMessage() + "\"}").build();
         }
         Cache<String, Table> tables = cache.getTables();
+        //获取用户域空间
         Table userTable = tables.get("user");
-        Field usernameField = new Field(0L, "username", "", "", "string", 0, 0, request.getUsername().replaceAll("([';])+|(--)+"," "), true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
+        //申请域格式空间
+        Field usernameField = new Field(0L, "username", "", "", "string", 0, 0, request.getUsername().replaceAll("([';])+|(--)+", " "), true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
 
         List<Field> searchUsernameFields = Collections.singletonList(usernameField);
         List<List<Data>> resultUsers = dao.selectList(userTable, Integer.MAX_VALUE, 1, 1, true, searchUsernameFields);
@@ -88,7 +91,7 @@ public class PersonalAuth {
 
         SignToken token = new SignToken(request.getUsername(), request.getHashpass(), request.getSign(), request.getTimestamp());
         Subject currentUser = SecurityUtils.getSubject();
-        if (!currentUser.isAuthenticated()){
+        if (!currentUser.isAuthenticated()) {
             //使用shiro来验证
             token.setRememberMe(true);
             try {
@@ -105,8 +108,8 @@ public class PersonalAuth {
                 else if (rq.getHeader("X-Real-IP") != null)
                     ip = rq.getHeader("X-Real-IP");
                 else ip = rq.getRemoteAddr();
-                String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());;
-                pdao.updateLoginInfo(id, ip, time);
+                String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                pdao.updateLoginInfo(id, ip, time); //更新用户登录状态（时间、ip）
 
             } catch (AuthenticationException e) {
 //                StackTraceElement[] sts = e.getStackTrace();
@@ -123,8 +126,9 @@ public class PersonalAuth {
 
     /**
      * 修改密码
-     * @param request       请求内容(用户名、hash密码、签名值)
-     * @return              返回内容(令牌)
+     *
+     * @param request 请求内容(用户名、hash密码、签名值)
+     * @return 返回内容(令牌)
      */
     @POST
     @Path("/changePwd")
@@ -144,7 +148,7 @@ public class PersonalAuth {
 
         Cache<String, Table> tables = cache.getTables();
         Table userTable = tables.get("user");
-        Field usernameField = new Field(0L, "username", "", "", "string", 0, 0, request.getUsername().replaceAll("([';])+|(--)+"," "), true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
+        Field usernameField = new Field(0L, "username", "", "", "string", 0, 0, request.getUsername().replaceAll("([';])+|(--)+", " "), true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
 
         List<Field> searchUsernameFields = Collections.singletonList(usernameField);
         List<List<Data>> resultUsers = dao.selectList(userTable, Integer.MAX_VALUE, 1, 1, true, searchUsernameFields);
@@ -163,7 +167,7 @@ public class PersonalAuth {
         pdao.updatePassword(id, pwd);
         SignToken token = new SignToken(request.getUsername(), request.getHashpass(), request.getSign(), request.getTimestamp());
         Subject currentUser = SecurityUtils.getSubject();
-        if (!currentUser.isAuthenticated()){
+        if (!currentUser.isAuthenticated()) {
             //使用shiro来验证
             token.setRememberMe(true);
             try {
@@ -193,6 +197,7 @@ public class PersonalAuth {
     /**
      * 获取用户名(已登录)
      * 重定向到json/needLogin.json（未登录）
+     *
      * @return
      */
     @GET
@@ -210,6 +215,7 @@ public class PersonalAuth {
 
     /**
      * 登出系统
+     *
      * @return
      */
     @POST
@@ -240,7 +246,7 @@ public class PersonalAuth {
             List<LinkedHashMap<String, Object>> menus = dao.selectMenu(username);
             StringBuffer jsonBuffer = new StringBuffer();
             jsonBuffer.append("[");
-            for (int i = 0; i < menus.size(); i ++) {
+            for (int i = 0; i < menus.size(); i++) {
                 if (i != 0)
                     jsonBuffer.append(", ");
                 jsonBuffer.append("{");

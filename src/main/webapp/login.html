@@ -1,0 +1,77 @@
+<div style="height: 100%;">
+    <div class="login-img">
+        <img src="image/logo-corp.png" height="50px">
+    </div>
+    <div class="login-back">
+        <img src="image/5570a25e7e4a4e3ebca4d436eb7cb7e9.jpeg" width="100%" style="margin-top: -10%;">
+    </div>
+    <div class="login-title">
+        <h1>文件传输管理系统</h1>
+    </div>
+    <div class="login-form">
+        <h3>登录</h3>
+        <form role="form" ng-submit="doLogin(keyPwd)">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-group" ng-show="!auth">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input type="password" class="form-control" ng-model="keyPwd" placeholder="UKEY密码" required="required">
+                    </div>
+                </div>
+                <div class="form-group" ng-show="auth">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input type="text" class="form-control" ng-model="user.username" placeholder="用户名" required="required">
+                    </div>
+                </div>
+                <div class="form-group" ng-show="auth">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input type="password" class="form-control" ng-model="user.hashpass" placeholder="密码" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="changePwd">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input type="password" class="form-control" ng-model="$parent.hashpass2" placeholder="密码验证" required="required"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="false">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input id="userSign" type="text" class="form-control" ng-model="user.sign" placeholder="用户签名" />
+                    </div>
+                </div>
+                <div class="form-group" ng-show="false">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                        <input id="userPk" type="text" class="form-control" ng-model="pk" placeholder="用户公钥" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <div id="HxUKeyDev" ng-show="false"></div>
+                        <div id="HxUKeyPK" ng-show="false"></div>
+                        <div id="HxUKeyDevInfo"></div>
+                    </div>
+                </div>
+                <div class="row" ng-show="!auth">
+                    <div class="col-md-12">
+                        <button type="button" ng-click="ukeyLogin(keyPwd)" class="btn btn-skin btn-block">认证</button>
+                    </div>
+                </div>
+                <div class="row" ng-show="auth && !changePwd">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-skin btn-block">登录</button>
+                    </div>
+                </div>
+                <div class="row" ng-show="changePwd">
+                    <div class="col-md-12">
+                        <button type="button" ng-click="doChange()" class="btn btn-skin btn-block">修改并登录</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

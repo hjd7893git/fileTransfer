@@ -23,7 +23,7 @@
             <dataSource type="HikariDataSourceFactory">
                 <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
                 <!--<property name="jdbcUrl" value="jdbc:oracle:thin:@127.0.0.1:1521:xe"/>-->
-                <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.0.165:1521:oracl1"/>
+                <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.0.165:1521:oracl2"/>
                 <property name="username" value="transfer"/>
                 <property name="password" value="transfer"/>
                 <property name="maximumPoolSize" value="10"/>

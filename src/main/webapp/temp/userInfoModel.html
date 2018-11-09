@@ -1,0 +1,13 @@
+<!-- userinfo -->
+<div class="dropdown userinfo">
+    <button type="button" class="btn dropdown-toggle" id="userDropdownMenu" data-toggle="dropdown">
+        <span class="glyphicon glyphicon-user"></span>
+        <p ng-bind="user.username"></p>
+        <span class="caret" style="margin-top: 8px;"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="userDropdownMenu">
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" ng-click="logout()">退出</a>
+        </li>
+    </ul>
+</div>

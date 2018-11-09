@@ -51,10 +51,11 @@ public class PersonalRest implements UniversalRestInterface {
                             data.setValue(key.substring(key.length() - 128));
                     });
                 }
-                datas.set(i, this.calcNodeSignCert(hsm, datas.get(i)));
+                datas.set(i, this.calcNodeSignCert(hsm, datas.get(i))); //计算节点证书
             }
             hsm.close();
         }
+
         // 修改节点配置，直接返回null
         if ("config".equals(tableName) && "Update".equals(action))
             return null;
@@ -71,10 +72,11 @@ public class PersonalRest implements UniversalRestInterface {
             for (int i = 0; i < datas.size(); i ++) {
                 int len = datas.get(i).size();
                 Long nodeId = 0L;
-                for (int j = 0; j < len; j ++){
+                for (int j = 0; j < len; j ++){ //取出id值
                     if ("nodeid".equals(datas.get(i).get(j).getKey()))
                         nodeId = Long.parseLong(datas.get(i).get(j).getValue().toString());
                 }
+                //查询传输节点 Node
                 Field idField = new Field(0L, "id", "", "", "number", nodeId, nodeId, "", true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
                 List<Field> searchModeFields = Collections.singletonList(idField);
                 List<List<Data>> result = dao.selectList(nodeTable, 10, 1, 1, true, searchModeFields);
@@ -92,7 +94,7 @@ public class PersonalRest implements UniversalRestInterface {
                             case "speed" : conf.setMaxSpeed(((BigDecimal) d.getValue()).intValue()); break;
                         }
                     });
-                    //    Step2: 查询Policy
+                    //    Step2: 查询Policy  传输通道
                     Field nodeIdField = new Field(0L, "nodeid", "", "", "number", nodeId, nodeId, "", true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
                     List<Field> searchPolicyFields = Collections.singletonList(nodeIdField);
                     //    此处继续使用了封装好的分页查询, 每页数量为Int最大值
@@ -111,7 +113,7 @@ public class PersonalRest implements UniversalRestInterface {
                                 case "extensions" : policy.setExtensions((String) d.getValue()); break;
                             }
 
-                            //    Step3: 查询Policy -> Node
+                            //    Step3: 查询Policy -> Node  传输目标管理 -->得到目标节点详细信息
                             Field policynodeIdField = new Field(0L, "policyid", "", "", "number", policy.getPolicyId(), policy.getPolicyId(), "", true, true, true, true, true, true, true, false, true, true, 0L, 0L, 0L);
                             List<Field> searchPolicyNodeFields = Collections.singletonList(policynodeIdField);
                             List<List<Data>> resultPolicyNodes = dao.selectList(policynodeTable, Integer.MAX_VALUE, 1, 1, true, searchPolicyNodeFields);
@@ -160,7 +162,7 @@ public class PersonalRest implements UniversalRestInterface {
                         if ("createtime".equals(d.getKey()))
                             d.setValue(time);
                         if ("status".equals(d.getKey()))
-                            d.setValue("0");
+                            d.setValue("0");        //节点策略配置初始状态
                     });
                     return response;
                 } else throw new UsualException("未找到该节点配置信息");
@@ -171,6 +173,7 @@ public class PersonalRest implements UniversalRestInterface {
 
     @Override
     public void after(RestResponse response, String tableName, String action) throws UsualException {
+        //非查询的操作处理 -> 增加历史纪录信息
         if (!"Select".equals(action)) {
             Subject subject = SecurityUtils.getSubject();
             if (subject.isAuthenticated()) {
@@ -215,11 +218,11 @@ public class PersonalRest implements UniversalRestInterface {
                 certData.append(String.format("%04d", ((String) a.getValue()).length()));
                 certData.append((String) a.getValue());
             }
-            if ("nodevk".equals(a.getKey()))
+            if ("nodevk".equals(a.getKey()))   //私钥值
                 vk.append((String) a.getValue());
         });
         args1.forEach(a -> {
-            if ("nodepk".equals(a.getKey())) {
+            if ("nodepk".equals(a.getKey())) { //公钥值
                 certData.append((String) a.getValue());
             }
         });
